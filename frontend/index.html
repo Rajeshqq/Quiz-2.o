@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Application</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-brain"></i>
+                <span>QuizApp</span>
+            </div>
+            <div class="nav-menu" id="nav-menu">
+                <a href="#" class="nav-link" onclick="showSection('home')">Home</a>
+                <a href="#" class="nav-link" onclick="showSection('quiz-list')" id="quiz-link" style="display:none;">Quizzes</a>
+                <a href="#" class="nav-link" onclick="showSection('history')" id="history-link" style="display:none;">History</a>
+                <a href="#" class="nav-link" onclick="showSection('admin')" id="admin-link" style="display:none;">Admin</a>
+                <a href="#" class="nav-link" onclick="showSection('profile')" id="profile-link" style="display:none;">Profile</a>
+                <a href="#" class="nav-link" onclick="logout()" id="logout-link" style="display:none;">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Home Section -->
+    <section id="home" class="section active">
+        <div class="hero">
+            <div class="hero-content">
+                <h1>Welcome to QuizApp</h1>
+                <p>Test your knowledge with our interactive quizzes</p>
+                <div class="auth-buttons">
+                    <button class="btn btn-primary" onclick="showSection('login')">Login</button>
+                    <button class="btn btn-secondary" onclick="showSection('register')">Register</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Login Section -->
+    <section id="login" class="section">
+        <div class="auth-container">
+            <div class="auth-card">
+                <h2>Login</h2>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="loginEmail">Email</label>
+                        <input type="email" id="loginEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </form>
+                <p>Don't have an account? <a href="#" onclick="showSection('register')">Register here</a></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Register Section -->
+    <section id="register" class="section">
+        <div class="auth-container">
+            <div class="auth-card">
+                <h2>Register</h2>
+                <form id="registerForm">
+                    <div class="form-group">
+                        <label for="registerUsername">Username</label>
+                        <input type="text" id="registerUsername" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerEmail">Email</label>
+                        <input type="email" id="registerEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerPassword">Password</label>
+                        <input type="password" id="registerPassword" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Register</button>
+                </form>
+                <p>Already have an account? <a href="#" onclick="showSection('login')">Login here</a></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Profile Section -->
+    <section id="profile" class="section">
+        <div class="container">
+            <div class="profile-card">
+                <h2>Profile</h2>
+                <div id="profileContent">
+                    <p>Loading profile...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quiz List Section -->
+    <section id="quiz-list" class="section">
+        <div class="container">
+            <h2>Available Quizzes</h2>
+            <div id="quizListContent" class="quiz-grid">
+                <p>Loading quizzes...</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quiz Taking Section -->
+    <section id="quiz-taking" class="section">
+        <div class="container">
+            <div class="quiz-container">
+                <div class="quiz-header">
+                    <h2 id="quizTitle">Quiz</h2>
+                    <div class="quiz-progress">
+                        <span id="questionNumber">Question 1</span>
+                        <span id="totalQuestions">of 10</span>
+                    </div>
+                </div>
+                <div id="quizContent">
+                    <!-- Quiz questions will be loaded here -->
+                </div>
+                <div class="quiz-actions">
+                    <button class="btn btn-secondary" onclick="previousQuestion()" id="prevBtn" style="display:none;">Previous</button>
+                    <button class="btn btn-primary" onclick="nextQuestion()" id="nextBtn">Next</button>
+                    <button class="btn btn-success" onclick="submitQuiz()" id="submitBtn" style="display:none;">Submit Quiz</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- History Section -->
+    <section id="history" class="section">
+        <div class="container">
+            <h2>Quiz History</h2>
+            <div id="historyContent">
+                <p>Loading history...</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quiz Answers Section -->
+    <section id="quiz-answers" class="section">
+        <div class="container">
+            <div id="answersContent">
+                <p>Loading answers...</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Admin Section -->
+    <section id="admin" class="section">
+        <div class="container">
+            <h2>Admin Panel</h2>
+            <div class="admin-tabs">
+                <button class="tab-btn active" onclick="showAdminTab('questions')">Manage Questions</button>
+                <button class="tab-btn" onclick="showAdminTab('create-quiz')">Create Quiz</button>
+                <button class="tab-btn" onclick="showAdminTab('quiz-leaderboards')">Quiz Leaderboards</button>
+            </div>
+
+            <!-- Questions Management -->
+            <div id="admin-questions" class="admin-tab active">
+                <div class="admin-actions">
+                    <button class="btn btn-primary" onclick="showAddQuestionForm()">Add Question</button>
+                    <select id="categoryFilter" onchange="filterQuestions()">
+                        <option value="">All Categories</option>
+                        <option value="science">Science</option>
+                        <option value="history">History</option>
+                        <option value="sports">Sports</option>
+                        <option value="technology">Technology</option>
+                    </select>
+                </div>
+                
+                <!-- Add Question Form -->
+                <div id="addQuestionForm" class="question-form" style="display:none;">
+                    <h3>Add New Question</h3>
+                    <form id="questionForm">
+                        <div class="form-group">
+                            <label for="questionText">Question</label>
+                            <textarea id="questionText" required></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="option1">Option 1</label>
+                                <input type="text" id="option1" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="option2">Option 2</label>
+                                <input type="text" id="option2" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="option3">Option 3</label>
+                                <input type="text" id="option3" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="option4">Option 4</label>
+                                <input type="text" id="option4" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="rightAnswer">Correct Answer</label>
+                                <select id="rightAnswer" required>
+                                    <option value="">Select correct answer</option>
+                                    <option value="option1">Option 1</option>
+                                    <option value="option2">Option 2</option>
+                                    <option value="option3">Option 3</option>
+                                    <option value="option4">Option 4</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="category">Category</label>
+                                <input type="text" id="category" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="difficulty">Difficulty</label>
+                            <select id="difficulty" required>
+                                <option value="">Select difficulty</option>
+                                <option value="easy">Easy</option>
+                                <option value="medium">Medium</option>
+                                <option value="hard">Hard</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-success">Add Question</button>
+                        <button type="button" class="btn btn-secondary" onclick="hideAddQuestionForm()">Cancel</button>
+                    </form>
+                </div>
+
+                <div id="questionsContent">
+                    <p>Loading questions...</p>
+                </div>
+            </div>
+
+            <!-- Create Quiz -->
+            <div id="admin-create-quiz" class="admin-tab">
+                <h3>Create New Quiz</h3>
+                <form id="createQuizForm">
+                    <div class="form-group">
+                        <label for="quizTitle">Quiz Title</label>
+                        <input type="text" id="quizTitleInput" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="quizCategory">Category</label>
+                        <input type="text" id="quizCategory" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="questionCount">Number of Questions</label>
+                        <input type="number" id="questionCount" min="1" max="50" required>
+                    </div>
+                    <button type="submit" class="btn btn-success">Create Quiz</button>
+                </form>
+            </div>
+        </div>
+        <div id="admin-quiz-leaderboards" class="admin-tab">
+            <div class="admin-actions" style="flex-direction: column; align-items: flex-start; gap: 1rem;">
+                <h2>Quiz Leaderboards</h2>
+                <div style="display: flex; gap: 1rem; width: 100%; max-width: 500px;">
+                    <div class="form-group" style="flex-grow: 1; margin-bottom: 0;">
+                        <label for="quizNameInput" class="hidden">Enter Quiz Name</label>
+                        <input type="text" id="quizNameInput" placeholder="Enter Quiz Name (e.g., springBoot quiz)" class="form-control">
+                    </div>
+                    <button class="btn btn-primary" id="fetchLeaderboardBtn" style="white-space: nowrap;">Fetch Leaderboard</button>
+                </div>
+                <p class="mt-2">Showing results for: <strong id="leaderboardQuizNameDisplay">N/A</strong></p>
+            </div>
+            <div id="leaderboardContent">
+                <p class="text-center">Loading leaderboard data...</p>
+                <table class="questions-table" id="leaderboardTable">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>User Name</th>
+                            <th>Score</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Loading Spinner -->
+    <div id="loading" class="loading" style="display:none;">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast" class="toast"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
