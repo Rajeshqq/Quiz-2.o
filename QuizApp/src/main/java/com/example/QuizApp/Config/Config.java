@@ -40,7 +40,7 @@ public class Config {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers("/registration", "/login","/randomPic").permitAll()
+                        .requestMatchers("/registration", "/login").permitAll()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(withDefaults())
